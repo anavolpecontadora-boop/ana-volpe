@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ana Carolina Volpe — Gestão Financeira Estratégica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --petrol:#0F4C5C;
+    --petrol-dark:#0A3642;
+    --petrol-deep:#072730;
+    --gold:#C9971C;
+    --gold-soft:#E0B53D;
+    --ice:#CFE3E8;
+    --ivory:#F6F3EC;
+    --ink:#13242A;
+    --mute:#5A6B70;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--ivory);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  .display{font-family:'Fraunces',serif;font-weight:600;line-height:1.05;letter-spacing:-.01em}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--petrol-dark);
+    color:#fff;
+    padding:72px 0 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before,.hero::after{
+    content:"";position:absolute;border-radius:50%;background:var(--petrol);opacity:.55;
+  }
+  .hero::before{width:320px;height:320px;top:-120px;right:-90px}
+  .hero::after{width:240px;height:240px;bottom:-130px;left:-100px}
+  .hero .wrap{position:relative;z-index:2}
+  .eyebrow{
+    font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold-soft);margin-bottom:20px;
+    opacity:0;transform:translateY(12px);animation:rise .7s .05s forwards;
+  }
+  .hero h1{
+    font-size:clamp(34px,7vw,52px);color:#fff;margin-bottom:8px;
+    opacity:0;transform:translateY(16px);animation:rise .8s .15s forwards;
+  }
+  .hero h1 .accent{color:var(--gold-soft);display:block}
+  .hero p.lead{
+    font-size:clamp(16px,2.6vw,19px);color:var(--ice);max-width:540px;margin-top:18px;
+    opacity:0;transform:translateY(16px);animation:rise .8s .3s forwards;
+  }
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* ---------- CALCULATOR (signature) ---------- */
+  .calc-section{padding:0;margin-top:-40px;position:relative;z-index:5}
+  .calc{
+    background:#fff;border-radius:18px;padding:30px 28px 34px;
+    box-shadow:0 24px 60px -28px rgba(7,39,48,.55);
+    opacity:0;transform:translateY(20px);animation:rise .8s .5s forwards;
+  }
+  .calc-tag{
+    display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--gold);background:#FBF3DE;padding:6px 12px;border-radius:999px;margin-bottom:16px;
+  }
+  .calc h2{font-size:clamp(21px,3.6vw,26px);color:var(--petrol);margin-bottom:6px}
+  .calc .sub{color:var(--mute);font-size:15px;margin-bottom:22px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:7px}
+  .input-money{position:relative}
+  .input-money span{
+    position:absolute;left:15px;top:50%;transform:translateY(-50%);
+    color:var(--mute);font-weight:600;font-size:16px;pointer-events:none;
+  }
+  .input-money input{
+    width:100%;padding:14px 16px 14px 44px;font-size:17px;font-family:'Inter',sans-serif;
+    font-weight:600;color:var(--ink);border:1.5px solid #DDE5E7;border-radius:11px;
+    background:#FBFCFC;transition:border-color .2s,box-shadow .2s;
+  }
+  .input-money input:focus{
+    outline:none;border-color:var(--petrol);box-shadow:0 0 0 4px rgba(15,76,92,.1);
+  }
+  .input-money input::placeholder{color:#AEBABE;font-weight:500}
+
+  .result{
+    margin-top:24px;background:var(--petrol);border-radius:13px;padding:0;
+    overflow:hidden;max-height:0;opacity:0;
+    transition:max-height .5s ease,opacity .4s ease,padding .4s ease;
+  }
+  .result.show{max-height:420px;opacity:1;padding:24px 24px 26px}
+  .result-grid{display:flex;gap:14px;flex-wrap:wrap}
+  .result-box{flex:1;min-width:130px}
+  .result-box .rlabel{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ice);margin-bottom:4px}
+  .result-box .rval{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(26px,5vw,34px);color:#fff;line-height:1.1}
+  .result-box .rval.gold{color:var(--gold-soft)}
+  .result-box .rval.warn{color:#F0A8A0}
+  .result-hook{
+    margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.18);
+    color:#fff;font-size:15px;
+  }
+  .result-hook strong{color:var(--gold-soft)}
+  .calc-note{margin-top:14px;font-size:12.5px;color:var(--mute);font-style:italic}
+
+  /* ---------- SECTIONS ---------- */
+  section.block{padding:56px 0}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  h2.title{font-size:clamp(26px,5vw,36px);color:var(--petrol);margin-bottom:14px}
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}
+  .reveal.in{opacity:1;transform:none}
+
+  /* stat */
+  .stat-block{background:var(--petrol-dark);color:#fff}
+  .stat-flex{display:flex;align-items:center;gap:30px;flex-wrap:wrap}
+  .stat-num{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(72px,16vw,120px);color:var(--gold-soft);line-height:.9}
+  .stat-text{flex:1;min-width:240px}
+  .stat-text p{font-size:clamp(16px,2.6vw,19px);color:var(--ice)}
+  .stat-text .src{font-size:13px;color:#8FB0B8;margin-top:10px;font-style:italic}
+
+  /* indicators */
+  .ind-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:28px}
+  .ind-card{
+    background:#fff;border-radius:14px;padding:22px 20px;
+    box-shadow:0 10px 30px -18px rgba(7,39,48,.4);
+    transition:transform .25s,box-shadow .25s;
+  }
+  .ind-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px -18px rgba(7,39,48,.5)}
+  .ind-card .ico{
+    width:42px;height:42px;border-radius:11px;background:#EAF1F2;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  }
+  .ind-card .ico svg{width:22px;height:22px;stroke:var(--petrol)}
+  .ind-card h3{font-size:15.5px;color:var(--petrol);margin-bottom:4px}
+  .ind-card p{font-size:13.5px;color:var(--mute)}
+
+  /* steps / convite */
+  .convite-block{background:var(--gold);color:var(--petrol-deep)}
+  .convite-block .kicker{color:var(--petrol-deep)}
+  .convite-block h2.title{color:var(--petrol-deep)}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:28px}
+  .step{background:#fff;border-radius:14px;padding:24px 22px}
+  .step .n{font-family:'Fraunces',serif;font-weight:700;font-size:34px;color:var(--gold);line-height:1}
+  .step h3{font-size:16.5px;color:var(--petrol);margin:10px 0 6px}
+  .step p{font-size:14px;color:var(--mute)}
+  .convite-close{font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(19px,3.4vw,24px);color:var(--petrol-deep);margin-top:30px;text-align:center}
+
+  /* sobre */
+  .sobre-block{background:var(--petrol-dark);color:#fff}
+  .sobre-block h2.title{color:#fff}
+  .sobre-block .kicker{color:var(--gold-soft)}
+  .sobre-list{margin-top:26px;display:flex;flex-direction:column;gap:22px}
+  .sobre-item{display:flex;gap:18px;align-items:flex-start}
+  .sobre-item .dot{
+    flex-shrink:0;width:46px;height:46px;border-radius:12px;background:var(--petrol);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .sobre-item .dot svg{width:23px;height:23px;stroke:var(--gold-soft)}
+  .sobre-item h3{font-size:16.5px;color:#fff;margin-bottom:3px}
+  .sobre-item p{font-size:14.5px;color:var(--ice)}
+
+  /* CTA final */
+  .cta-final{background:var(--petrol-deep);color:#fff;text-align:center;padding:64px 0 72px}
+  .cta-final h2{font-size:clamp(28px,5.5vw,40px);color:#fff;margin-bottom:14px}
+  .cta-final p{color:var(--ice);font-size:17px;max-width:480px;margin:0 auto 30px}
+  .wa-btn{
+    display:inline-flex;align-items:center;gap:11px;background:var(--gold);color:var(--petrol-deep);
+    font-weight:700;font-size:18px;padding:17px 32px;border-radius:999px;text-decoration:none;
+    box-shadow:0 14px 34px -12px rgba(201,151,28,.7);transition:transform .2s,box-shadow .2s;
+  }
+  .wa-btn:hover{transform:translateY(-3px);box-shadow:0 20px 42px -12px rgba(201,151,28,.85)}
+  .wa-btn svg{width:24px;height:24px;fill:var(--petrol-deep)}
+  .cta-final .sig{margin-top:34px;font-size:14px;color:#8FB0B8}
+  .cta-final .sig strong{color:#fff;font-weight:600}
+
+  /* floating whatsapp */
+  .float-wa{
+    position:fixed;right:20px;bottom:20px;z-index:50;
+    width:60px;height:60px;border-radius:50%;background:#25D366;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 26px -6px rgba(0,0,0,.4);transition:transform .2s;
+  }
+  .float-wa:hover{transform:scale(1.08)}
+  .float-wa svg{width:32px;height:32px;fill:#fff}
+
+  @media (max-width:560px){
+    .hero{padding:56px 0 54px}
+    section.block{padding:46px 0}
+    .stat-flex{gap:14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Gestão financeira estratégica</div>
+    <h1 class="display">As contas não fecham,<span class="accent">mesmo com boas vendas?</span></h1>
+    <p class="lead">Você cumpre todas as obrigações, vende bem — e ainda assim o dinheiro não sobra como deveria. O problema não é esforço. É falta de informação organizada.</p>
+  </div>
+</header>
+
+<!-- CALCULADORA -->
+<div class="calc-section">
+  <div class="wrap">
+    <div class="calc">
+      <span class="calc-tag">Teste agora</span>
+      <h2 class="display">Você sabe o lucro real da sua empresa?</h2>
+      <p class="sub">Coloque os números de um mês qualquer e descubra na hora.</p>
+
+      <div class="field">
+        <label for="fat">Faturamento do mês</label>
+        <div class="input-money"><span>R$</span>
+          <input type="text" id="fat" inputmode="numeric" placeholder="50.000">
+        </div>
+      </div>
+      <div class="field">
+        <label for="desp">Despesas e custos do mês</label>
+        <div class="input-money"><span>R$</span>
+          <input type="text" id="desp" inputmode="numeric" placeholder="42.000">
+        </div>
+      </div>
+
+      <div class="result" id="result">
+        <div class="result-grid">
+          <div class="result-box">
+            <div class="rlabel">Lucro do mês</div>
+            <div class="rval gold" id="lucro">R$ 0</div>
+          </div>
+          <div class="result-box">
+            <div class="rlabel">Margem de lucro</div>
+            <div class="rval" id="margem">0%</div>
+          </div>
+        </div>
+        <div class="result-hook" id="hook"></div>
+      </div>
+      <p class="calc-note">Cálculo simplificado, só para reflexão. Na visita eu analiso seus números de verdade — por produto, serviço e ponto de equilíbrio.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ESTATISTICA -->
+<section class="block stat-block">
+  <div class="wrap reveal">
+    <div class="kicker" style="color:var(--gold-soft)">O cenário</div>
+    <div class="stat-flex">
+      <div class="stat-num" id="statNum">0%</div>
+      <div class="stat-text">
+        <p>das micro e pequenas empresas fecham por má gestão do fluxo de caixa e falta de planejamento financeiro.</p>
+        <div class="src">Fonte: Sebrae</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDICADORES -->
+<section class="block">
+  <div class="wrap reveal">
+    <div class="kicker">A solução</div>
+    <h2 class="title display">Os números que mostram a verdade</h2>
+    <p style="color:var(--mute);max-width:560px">Com esses indicadores na mão, você decide com base na realidade da empresa — não no "achismo".</p>
+    <div class="ind-grid">
+      <div class="ind-card">
+        <div class="ico"><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18"/></svg></div>
+        <h3>Fluxo de caixa</h3><p>Previsibilidade do que entra e sai.</p>
+      </div>
+      <div class="ind-card">
+        <div class="ico"><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+        <h3>Margem de lucro</h3><p>Real, e por produto ou serviço.</p>
+      </div>
+      <div class="ind-card">
+        <div class="ico"><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Ponto de equilíbrio</h3><p>Quanto você precisa vender para não ter prejuízo.</p>
+      </div>
+      <div class="ind-card">
+        <div class="ico"><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M3 12h18"/></svg></div>
+        <h3>Endividamento</h3><p>Sob controle, sem sustos no fim do mês.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONVITE -->
+<section class="block convite-block">
+  <div class="wrap reveal">
+    <div class="kicker">Uma proposta inusitada</div>
+    <h2 class="title display">Eu vou até a sua empresa</h2>
+    <p style="color:var(--petrol-deep);max-width:560px;font-weight:500">Se você se identificou com tudo isso, o primeiro passo é simples e sem compromisso:</p>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div><h3>Agende pelo WhatsApp</h3>
+        <p>Escolha a data e o horário que funcionam para você.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div><h3>Conheço sua realidade</h3>
+        <p>Vou até a sua empresa entender de perto como ela funciona.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div><h3>Proposta personalizada</h3>
+        <p>Feita para o seu momento — e só se fizer sentido para você.</p>
+      </div>
+    </div>
+    <p class="convite-close">Vamos juntos criar o futuro dos seus sonhos.</p>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="block sobre-block">
+  <div class="wrap reveal">
+    <div class="kicker">Quem sou eu</div>
+    <h2 class="title display">Ana Carolina Volpe</h2>
+    <p style="color:var(--ice);max-width:560px">Contadora, perita contábil e empreendedora.</p>
+    <div class="sobre-list">
+      <div class="sobre-item">
+        <div class="dot"><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 006 0L7 7zm10 0l-3 7a3 3 0 006 0l-3-7z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h3>Auxiliar da Justiça</h3><p>Pós-graduada em Perícia Contábil, atuo desde 2025 como auxiliar do juízo nos Tribunais de Justiça de São Paulo e Minas Gerais, analisando finanças de empresas em processos.</p></div>
+      </div>
+      <div class="sobre-item">
+        <div class="dot"><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-8 0v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h3>Empreendedora como você</h3><p>Conheço na prática os desafios de quem tem um negócio — e falo a sua língua, sem juridiquês nem contabilês.</p></div>
+      </div>
+      <div class="sobre-item">
+        <div class="dot"><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21 8 14 2 9.4h7.6z" stroke-linejoin="round"/></svg></div>
+        <div><h3>Meu propósito</h3><p>Trazer o rigor técnico da perícia para o dia a dia da sua empresa, para que os números trabalhem a favor dos seus planos.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="wrap">
+    <h2 class="display">Vamos conversar?</h2>
+    <p>Uma visita pode mudar a forma como você enxerga o seu negócio. O primeiro passo é seu.</p>
+    <a class="wa-btn" id="waMain" href="https://wa.me/5511995005330?text=Ol%C3%A1%20Ana!%20Vi%20sua%20p%C3%A1gina%20e%20quero%20agendar%20uma%20visita." target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 01-3.2-2.8c-.1-.2 0-.4.1-.5l.4-.5c.1-.2.1-.3 0-.5l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.7 3 .6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.4-.2z"/></svg>
+      Agendar visita pelo WhatsApp
+    </a>
+    <div style="margin-top:22px;color:var(--ice);font-size:15px;line-height:1.9">
+      WhatsApp: <strong style="color:#fff">(11) 99500-5330</strong><br>
+      <a href="mailto:anavolpecontadora@gmail.com" style="color:var(--gold-soft);text-decoration:none">anavolpecontadora@gmail.com</a>
+    </div>
+    <div class="sig"><strong>Ana Carolina Volpe</strong> — Contadora e Perita Contábil · CRCSP359532/O-2</div>
+  </div>
+</section>
+
+<a class="float-wa" id="waFloat" href="https://wa.me/5511995005330?text=Ol%C3%A1%20Ana!%20Vi%20sua%20p%C3%A1gina%20e%20quero%20agendar%20uma%20visita." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 01-3.2-2.8c-.1-.2 0-.4.1-.5l.4-.5c.1-.2.1-.3 0-.5l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.7 3 .6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.4-.2z"/></svg>
+</a>
+
+<script>
+  // ---- Currency input formatting (BR) ----
+  function onlyDigits(v){return v.replace(/\D/g,'')}
+  function fmtBR(n){return n.toLocaleString('pt-BR')}
+  function bindMoney(el){
+    el.addEventListener('input',()=>{
+      const d=onlyDigits(el.value);
+      el.value=d?fmtBR(parseInt(d,10)):'';
+      compute();
+    });
+  }
+  const fat=document.getElementById('fat');
+  const desp=document.getElementById('desp');
+  bindMoney(fat);bindMoney(desp);
+
+  const result=document.getElementById('result');
+  const lucroEl=document.getElementById('lucro');
+  const margemEl=document.getElementById('margem');
+  const hookEl=document.getElementById('hook');
+
+  function compute(){
+    const f=parseInt(onlyDigits(fat.value)||'0',10);
+    const d=parseInt(onlyDigits(desp.value)||'0',10);
+    if(f<=0){result.classList.remove('show');return;}
+    const lucro=f-d;
+    const margem=f>0?(lucro/f*100):0;
+    lucroEl.textContent='R$ '+fmtBR(lucro);
+    lucroEl.className='rval '+(lucro<0?'warn':'gold');
+    margemEl.textContent=margem.toFixed(1).replace('.',',')+'%';
+    margemEl.className='rval '+(lucro<0?'warn':'');
+    let msg;
+    if(lucro<0){
+      msg='Sua empresa fechou esse mês <strong>no vermelho</strong>. Vender mais não resolve sozinho — é preciso entender onde o dinheiro está indo.';
+    }else if(margem<10){
+      msg='Margem apertada. <strong>Você sabia esse número de cabeça?</strong> A maioria dos empresários descobre só agora — e é aí que mora o risco.';
+    }else{
+      msg='Boa margem! Mas <strong>você sabe quais produtos puxam para cima e quais puxam para baixo?</strong> É isso que uma gestão estratégica revela.';
+    }
+    hookEl.innerHTML=msg;
+    result.classList.add('show');
+  }
+
+  // ---- Scroll reveals ----
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.18});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // ---- Count up for 48% ----
+  const statNum=document.getElementById('statNum');
+  let counted=false;
+  const statIO=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting&&!counted){
+        counted=true;
+        const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+        if(reduce){statNum.textContent='48%';return;}
+        let n=0;const t=setInterval(()=>{
+          n++;statNum.textContent=n+'%';
+          if(n>=48){clearInterval(t);}
+        },22);
+      }
+    });
+  },{threshold:.5});
+  statIO.observe(statNum);
+</script>
+</body>
+</html>
